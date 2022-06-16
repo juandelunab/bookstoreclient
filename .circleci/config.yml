@@ -1,8 +1,9 @@
 version: '2.1'
 orbs:
   node: circleci/node@5.0.2
+  heroku: circleci/heroku@0.0.10
 jobs:
-  install-node-example:
+  install dependecies:
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -11,6 +12,10 @@ jobs:
           node-version: '18.3'
       - run: node --version
 workflows:
-  test_my_app:
+  test_and_deploy:
     jobs:
       - node/test
+      - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
+          filters:
+            branches:
+              only: main
